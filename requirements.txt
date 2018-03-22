@@ -1,8 +1,15 @@
 mysql-python
-sqlalchemy
 Flask==0.10.1
 Flask-SQLAlchemy==1.0
 Flask-WTF==0.9.3
 Flask-Script
 Flask-Migrate
 simplejson
+Flask-Login==0.3.1
+Werkzeug==0.9.6
+argparse==1.2.1
+itsdangerous==0.24
+rauth==0.7.0
+requests==2.4.3
+MarkupSafe==0.23
+Jinja2==2.7.3

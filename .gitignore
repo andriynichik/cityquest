@@ -3,3 +3,4 @@ venv/
 dumps/
 .idea/
 .DS_Store
+*.pyc

@@ -6,11 +6,14 @@
     volumes:
      - .:/code
     links:
-     - db
+     - mysql
     hostname: myappserver
-  db:
-    hostname: mysqlserver
-    image: orchardup/mysql
+  mysql:
+    image: mysql:latest
+    volumes:
+     - /var/lib/mysql
     environment:
-       MYSQL_ROOT_PASSWORD: p@ssw0rd123
-       MYSQL_DATABASE: wordpress
+     - MYSQL_ROOT_PASSWORD=123456
+     - MYSQL_DATABASE=geodata
+    ports:
+     - 3306:3306

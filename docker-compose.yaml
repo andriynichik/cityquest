@@ -10,7 +10,7 @@
     hostname: myappserver
   mysql:
     image: mysql:latest
-    volumes:
+    volumes:12345
      - /var/lib/mysql
     environment:
      - MYSQL_ROOT_PASSWORD=123456

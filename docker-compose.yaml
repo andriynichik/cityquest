@@ -1,16 +1,16 @@
   web:
     build: .
-    command: python code/untitled.py
+    command: python app/manage.py
     ports:
      - "5000:5000"
     volumes:
-     - .:/code
+     - .:/app
     links:
      - mysql
     hostname: myappserver
   mysql:
     image: mysql:latest
-    volumes:12345
+    volumes:
      - /var/lib/mysql
     environment:
      - MYSQL_ROOT_PASSWORD=123456

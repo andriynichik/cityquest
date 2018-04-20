@@ -4,7 +4,7 @@ import random
 #  from oauth import OAuthSignIn
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
-
+from models import User
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'top secret!'
@@ -28,12 +28,6 @@ lm.login_view = 'index'
 def confirm_region(region_id):
     pass
 
-class User(UserMixin, db.Model):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    social_id = db.Column(db.String(64), nullable=False, unique=True)
-    nickname = db.Column(db.String(64), nullable=False)
-    email = db.Column(db.String(64), nullable=True)
 
 
 @lm.user_loader

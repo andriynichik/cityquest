@@ -103,6 +103,7 @@ try:
             outfile = os.path.join(
                 args.country, IMG_PREFIX + lat_lon + IMG_SUFFIX)
             url = GOOGLE_URL + "&location=" + lat_lon
+            print (url)
             if args.heading:
                 url += "&heading=" + args.heading
             if args.pitch:

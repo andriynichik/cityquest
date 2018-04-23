@@ -1,14 +1,24 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, flash, redirect, url_for
 import random
+import  os
+import sys
 #  from oauth import OAuthSignIn
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
-from models import User
+from models import *
+
+from config import Config
+from flask.ext.script import Manager
+from flask.ext.migrate import Migrate, MigrateCommand
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'top secret!'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:p@ssw0rd123@mysqlserver/db_name'
+app.config.from_object(Config)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
+
 app.config['OAUTH_CREDENTIALS'] = {
     'facebook': {
         'id': '205733200185301',
@@ -20,7 +30,6 @@ app.config['OAUTH_CREDENTIALS'] = {
     }
 }
 
-db = SQLAlchemy(app)
 lm = LoginManager(app)
 lm.login_view = 'index'
 

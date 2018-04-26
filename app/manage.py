@@ -4,6 +4,7 @@ import random
 import  os
 import sys
 #  from oauth import OAuthSignIn
+import json
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
 from models import *
@@ -11,6 +12,7 @@ from models import *
 from config import Config
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
+from generator import GeoGen
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -83,6 +85,13 @@ def oauth_callback(provider):
 @app.route('/')
 def home():
     return render_template('index.html')
+
+@app.route('/gen')
+def gen():
+    created = GeoGen(lat = "49.3582859246",lng = "26.3020379839")
+    rezult  = created.save_city()
+    return json.dumps(rezult) 
+
 
 
 @app.route('/maps')

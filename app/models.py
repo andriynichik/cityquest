@@ -8,13 +8,20 @@ class Locations(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     region_id = db.Column(db.Integer, nullable=False, unique=True)
     city_id = db.Column(db.Integer, nullable=False)
-    lat = db.Column(db.String(64), nullable=True)
-    lon = db.Column(db.String(64), nullable=True)
-    img = db.Column(db.String(64), nullable=True)
+    latitude = db.Column(db.String(64), nullable=True)
+    longitude = db.Column(db.String(64), nullable=True)
     created = db.Column(db.DateTime, default=datetime.datetime.now())
 
-    def __init__(self, id):
-        self.id = id
+    def __init__(self, id,  region_id, city_id, latitude, longitude):
+
+        self.region_id = region_id
+        self.city_id =city_id
+        self.latitude = latitude
+        self.longitude = longitude
+
+
+
+  
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -31,7 +38,7 @@ class Geodata(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     region_id = db.Column(db.Integer, nullable=False, unique=True)
     lat = db.Column(db.String(64), nullable=True)
-    lon = db.Column(db.String(64), nullable=True)
+    lng = db.Column(db.String(64), nullable=True)
     title = db.Column(db.String(64), nullable=True)
 
     def __init__(self, id):

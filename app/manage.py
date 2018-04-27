@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, render_template, flash, redirect, url_for
+from flask import Flask, render_template, flash, redirect, url_for, request
 import random
 import  os
 import sys
 #  from oauth import OAuthSignIn
 import json
 from flask_sqlalchemy import SQLAlchemy
+
+from sqlalchemy.sql import func
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
-from models import *
+from models import Locations, Geodata
 
 from config import Config
 from flask.ext.script import Manager
@@ -80,19 +82,23 @@ def oauth_callback(provider):
         db.session.commit()
     login_user(user, True)
     return redirect(url_for('index'))
-
-
+  
 @app.route('/')
 def home():
     return render_template('index.html')
 
 @app.route('/gen')
 def gen():
-    created = GeoGen(lat = "49.3582859246",lng = "26.3020379839")
+    created = GeoGen(lat = "48.5206048429",lng = "32.2237075854")
     rezult  = created.save_city()
     return json.dumps(rezult) 
 
-
+# localhost:5000/api/create_location?lat=48.5206048429&lng=32.2237075854
+@app.route('/api/create_location')
+def create_location():
+    created = GeoGen(lat = str(request.args.get('lat')),lng = str(request.args.get('lng')))
+    rezult  = created.save_city()
+    return json.dumps(rezult)
 
 @app.route('/maps')
 def maps():
@@ -191,8 +197,11 @@ def maps():
 
     ]
     data = random.choice(points)
+    locate =  Locations.query.order_by(func.random()).first()
+    print (locate.latitude)
     print(data)
-    return render_template('maps.html', data=data, regions=regions)
+    data = {"lat": locate.latitude,"lng": locate.longitude}
+    return render_template('maps.html', id=locate.id,  data=data, regions=regions)
 
 if __name__ == '__main__':
     app.run(debug=True,  host='0.0.0.0')

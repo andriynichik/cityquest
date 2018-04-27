@@ -40,15 +40,16 @@ display:none !important;
     </style>
   </head>
   <body>
+
     <div id="map"></div>
-    
+  {{id}}
     <script>
       function initPano() {
         // Note: constructed panorama objects have visible: true
         // set by default.
         var panorama = new google.maps.StreetViewPanorama(
             document.getElementById('map'), {
-              position: {lat: {{data[0]['lat']}}, lng: {{data[0]['lng']}}},
+              position: {lat: {{data['lat']}}, lng: {{data['lng']}}},
               addressControlOptions: {
                 position: google.maps.ControlPosition.BOTTOM_CENTER
               },

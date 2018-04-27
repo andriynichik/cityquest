@@ -12,7 +12,7 @@ class Locations(db.Model):
     longitude = db.Column(db.String(64), nullable=True)
     created = db.Column(db.DateTime, default=datetime.datetime.now())
 
-    def __init__(self, id,  region_id, city_id, latitude, longitude):
+    def __init__(self,  region_id, city_id, latitude, longitude):
 
         self.region_id = region_id
         self.city_id =city_id

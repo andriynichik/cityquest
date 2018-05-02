@@ -8,7 +8,7 @@ from .generator  import GeoGen
 from flask.ext.fixtures import FixturesMixin
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path = "/assets" , static_folder='assets')
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 db.init_app(app)

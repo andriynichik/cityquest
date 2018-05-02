@@ -16,7 +16,7 @@ from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 from generator import GeoGen
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path = "/assets" , static_folder='assets')
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -198,8 +198,8 @@ def maps():
     ]
     data = random.choice(points)
     locate =  Locations.query.order_by(func.random()).first()
-    print (locate.latitude)
-    print(data)
+    # print (locate.latitude)
+    # print(data)
     data = {"lat": locate.latitude,"lng": locate.longitude}
     return render_template('maps.html', id=locate.id,  data=data, regions=regions)
 

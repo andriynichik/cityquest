@@ -350,10 +350,7 @@ display:none !important;
 					<!-- User menu -->
 					<div class="sidebar-user">
 
-                          {% for region in regions %}
-                        <p><button type="button" id="" class="btn btn-info btn-labeled btn-xs"><b><i class="icon-pin-alt"></i></b>{{region}} {{regions[region|string].decode('utf-8')}}</button>
-                        </p>
-                      {% endfor %}
+                        00:00
 
 
                         <div class="category-content">
@@ -363,15 +360,24 @@ display:none !important;
 					<!-- /user menu -->
 
 
+
 					<!-- Main navigation -->
 					<div class="sidebar-category sidebar-category-visible">
 						<div class="category-content no-padding">
 							<ul class="navigation navigation-main navigation-accordion">
 
+								<!-- Main -->
 
-								<!-- /page kits -->
+{% for region in regions %}
 
-							</ul>
+    <li><a href="#" id="{{region}}"><i class="icon-pin-alt"></i> <span> {{regions[region|string].decode('utf-8')}}</span></a></li>
+
+                      {% endfor %}
+
+                            </ul>
+
+
+
 						</div>
 					</div>
 					<!-- /main navigation -->

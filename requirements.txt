@@ -16,3 +16,4 @@ Jinja2==2.7.3
 Pillow
 pyshp
 Flask-Fixtures
+Flask-Session

@@ -132,7 +132,7 @@
   position: relative;
 }
 .navigation li + li {
-  margin-top: 1px;
+  margin-top:-14px;
 }
 .navigation li + .navigation-header {
   margin-top: 10px;

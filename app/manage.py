@@ -31,7 +31,10 @@ app.config['OAUTH_CREDENTIALS'] = {
     'twitter': {
         'id': '3RzWQclolxWZIMq5LJqzRZPTl',
         'secret': 'm9TEd58DSEtRrZHpz2EjrV9AhsBRxKMo8m3kuIZj3zLwzwIimt'
-    }
+    }, 'google': {
+            'id': '953536087639-c13jglsqemu2hf4ansq64a9rnmi9jofh.apps.googleusercontent.com',
+            'secret': '-mgTCV7H5vtRk8UoWXp8qVZY'
+        }
 }
 
 lm = LoginManager(app)
@@ -108,7 +111,6 @@ def check_region():
         result = True
     else:
         result = False
-        session.pop('city_id', None)
     return json.dumps({'status':result})
 
 

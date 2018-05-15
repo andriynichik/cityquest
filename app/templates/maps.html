@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Limitless - Responsive Web Application Kit by Eugene Kopyov</title>
+	<title>Sity Quest</title>
 <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -58,11 +58,34 @@ display:none !important;
     <script type="text/javascript" src="assets/js/pages/form_select2.js"></script>
     <script type="text/javascript" src="assets/js/plugins/forms/selects/select2.min.js"></script>
     <script type="text/javascript" src="assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
+    <script type="text/javascript" src="assets/js/plugins/notifications/bootbox.min.js"></script>
+    <script type="text/javascript" src="assets/js/plugins/forms/selects/select2.min.js"></script>
+    <script type="text/javascript" src="assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
+        <script type="text/javascript" src="assets/js/pages/form_select2.js"></script>
+
+
 	<!-- /theme JS files -->
 <script>
 
     function check_city_change(region_id) {
-  alert(region_id);
+              $.ajax({
+                  type : 'POST',
+                  url : "/get_region_city",
+                  data : {'region_id':region_id},
+                  success: function (result) {
+                      result = JSON.parse(result);
+                     $('#modal_form_vertical').on('shown.bs.modal', function() {
+                        modal = $(this);
+                        var html =  '';
+                        for (var key in result) {
+                            var value = result[key];
+                            html += '<option value="'+key+'">'+value+'</option>';  
+                        }
+                        modal.find(".search_select2").append(html);
+                     }).modal('show');
+
+                }
+            });
     }
 
     function check_region(region_id) {
@@ -74,17 +97,11 @@ display:none !important;
                   success: function (result) {
                       result = JSON.parse(result);
                       if (result['status'] == true){
-                          swal({
-                            title: "Ви вгадали область!",
-                            text: "Оберіть місто!",
-                            confirmButtonColor: "#66BB6A",
-                            type: "success"
-                          },
-                           function(){
+
+
                                 check_city_change(region_id);
 
-                              }
-                          );
+
                       }else{
 
                           swal({
@@ -113,7 +130,39 @@ display:none !important;
 </head>
 
 <body>
+ <div id="modal_form_vertical" class="modal fade">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">×</button>
+									<h5 class="modal-title">Vertical form</h5>
+								</div>
 
+								<form action="#">
+									<div class="modal-body">
+
+
+                                    <div class="content-group-lg">
+										<h6 class="text-semibold">Вірно! Оберіть населений пункт:</h6>
+
+										<select data-placeholder="Оберіть населений пункт" class="search_select2" tabindex="-1" aria-hidden="true">
+
+										</select>
+									</div>
+
+
+
+
+									</div>
+
+									<div class="modal-footer">
+
+										<button type="submit" class="btn btn-primary">Підтвердити</button>
+									</div>
+								</form>
+							</div>
+						</div>
+ </div>
 	<!-- Main navbar -->
 	<div class="navbar navbar-default header-highlight">
 		<div class="navbar-header">
@@ -285,7 +334,7 @@ display:none !important;
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<i class="icon-bubbles4"></i>
 							<span class="visible-xs-inline-block position-right">Messages</span>
-							<span class="badge bg-warning-400">{{id}}</span>
+							<span class="badge bg-warning-400"></span>
 						</a>
 
 						<div class="dropdown-menu dropdown-content width-350">
@@ -487,40 +536,9 @@ display:none !important;
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8qnUtAO7UDytgmEUqwbYEBWoNVvebcpI&callback=initPano">
-    </script>     <!-- Inline form modal -->
-					<div id="modal_form_inline" class="modal fade">
-						<div class="modal-dialog">
-							<div class="modal-content text-center">
-								<div class="modal-header">
-									<h5 class="modal-title">Inline form</h5>
-								</div>
-
-								<form action="#" class="form-inline">
-									<div class="modal-body">
-										<div class="form-group has-feedback">
-											<label>Username: </label>
-											<input type="text" placeholder="Your username" class="form-control">
-											<div class="form-control-feedback">
-												<i class="icon-user text-muted"></i>
-											</div>
-										</div>
-
-										<div class="form-group has-feedback">
-											<label>Password: </label>
-											<input type="password" placeholder="Your password" class="form-control">
-											<div class="form-control-feedback">
-												<i class="icon-lock text-muted"></i>
-											</div>
-										</div>
-									</div>
-
-									<div class="modal-footer text-center">
-										<button type="submit" class="btn btn-primary">Sign me in <i class="icon-plus22"></i></button>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-					<!-- /inline form modal -->
+    </script>
+<script type="text/javascript">
+      $(".search_select2").select2();
+</script>
 </body>
 </html>

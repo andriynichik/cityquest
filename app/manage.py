@@ -108,7 +108,19 @@ def check_region():
         result = True
     else:
         result = False
+        session.pop('city_id', None)
     return json.dumps({'status':result})
+
+
+@app.route('/get_region_city', methods=['GET','POST'])
+def get_sity_by_region():
+    region_id = request.form["region_id"]
+    cityes = Geodata.query.filter_by(region_id=region_id).all()
+    data = {}
+    for item in cityes:
+        data[str(item.id)] = item.title
+    return json.dumps(data)
+
 
 @app.route('/maps')
 def maps():
@@ -139,15 +151,17 @@ def maps():
         '24': 'Івано-Франківська область',
         '25': 'Чернівецька область',
     }
+    if 'city_id' in session and 'lat' in session:
+        data = {"lat": session['lat'], "lng": session['lng']}
+    else:
+        locate =  Locations.query.order_by(func.random()).first()
+        session['region_id'] = locate.region_id
+        session['city_id'] = locate.city_id
+        session['lat'] = locate.latitude
+        session['lng'] = locate.longitude
 
-    locate =  Locations.query.order_by(func.random()).first()
-    # print (locate.latitude)
-    # print(data)
-    session['region_id'] = locate.region_id
-    session['city_id'] = locate.city_id
-
-    data = {"lat": locate.latitude,"lng": locate.longitude}
-    return render_template('maps.html', id=locate.id,  data=data, regions=regions)
+        data = {"lat": locate.latitude,"lng": locate.longitude}
+    return render_template('maps.html',  data=data, regions=regions)
 
 if __name__ == '__main__':
     app.run(debug=True,  host='0.0.0.0')

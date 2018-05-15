@@ -8,13 +8,13 @@ import json
 from flask_sqlalchemy import SQLAlchemy
 # from flask.ext.session import Session
 from sqlalchemy.sql import func
-from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
-from models import Locations, Geodata
-
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
+from models import Locations, Geodata, User
 from config import Config
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 from generator import GeoGen
+
 
 app = Flask(__name__, static_url_path = "/assets" , static_folder='assets')
 app.config.from_object(Config)
@@ -44,7 +44,15 @@ lm.login_view = 'index'
 def confirm_region(region_id):
     pass
 
+@lm.user_loader
+def get_user(ident):
+  return User.query.get(int(ident))
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user is not None and current_user.is_authenticated():
+        return redirect(url_for('maps'))
+    return  redirect(url_for('index'))
 
 @lm.user_loader
 def load_user(id):
@@ -57,16 +65,24 @@ def index():
 
 
 @app.route('/logout')
+@login_required
 def logout():
+    logout_user()
+    session.clear()
     return redirect(url_for('index'))
 
 
+# @lm.user_loader
+# def load_user(id):
+#     return User.query.get(int(id))
+
 @app.route('/authorize/<provider>')
 def oauth_authorize(provider):
-   if not current_user.is_anonymous:
-       return redirect(url_for('index'))
-   oauth = OAuthSignIn.get_provider(provider)
-   return oauth.authorize()
+    # Flask-Login function
+    if not current_user.is_anonymous:
+        return redirect(url_for('index'))
+    oauth = OAuthSignIn.get_provider(provider)
+    return oauth.authorize()
 
 
 @app.route('/callback/<provider>')
@@ -74,18 +90,30 @@ def oauth_callback(provider):
     if not current_user.is_anonymous:
         return redirect(url_for('index'))
     oauth = OAuthSignIn.get_provider(provider)
-    social_id, username, email = oauth.callback()
-    if social_id is None:
+    username, email = oauth.callback()
+    if email is None:
+        # I need a valid email address for my user identification
         flash('Authentication failed.')
         return redirect(url_for('index'))
-    user = User.query.filter_by(social_id=social_id).first()
+    # Look if the user already exists
+    user=User.query.filter_by(email=email).first()
     if not user:
-       user = User(social_id=social_id, nickname=username, email=email)
-       db.session.add(user)
-       db.session.commit()
+        # Create the user. Try and use their name returned by Google,
+        # but if it is not set, split the email address at the @.
+        nickname = username
+        if nickname is None or nickname == "":
+            nickname = email.split('@')[0]
+
+        # We can do more work here to ensure a unique nickname, if you 
+        # require that.
+        user=User(nickname=nickname, email=email)
+        db.session.add(user)
+        db.session.commit()
+    # Log in the user, by default remembering them for their next visit
+    # unless they log out.
     login_user(user, True)
-    return redirect(url_for('index'))
-  
+    return redirect(url_for('maps'))
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -125,6 +153,7 @@ def get_sity_by_region():
 
 
 @app.route('/maps')
+@login_required
 def maps():
     regions = {
 

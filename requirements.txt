@@ -17,4 +17,4 @@ Pillow
 pyshp
 Flask-Fixtures
 Flask-Session
-urllib2
+Flask-Security

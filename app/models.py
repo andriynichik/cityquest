@@ -1,7 +1,9 @@
 from flask.ext.sqlalchemy import SQLAlchemy 
 import datetime
+from flask.ext.login import LoginManager, UserMixin
 
 db = SQLAlchemy()
+
 
 class Locations(db.Model):
     __tablename__ = 'locations'
@@ -30,8 +32,24 @@ class User(db.Model):
     nickname = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=True)
 
-    def __init__(self, id):
-        self.id = id
+    def __init__(self,  nickname, email):
+
+       
+        self.nickname =nickname
+        self.email = email
+      
+    def is_active(self):
+        return True
+
+    def get_id(self):
+        return self.id
+
+    def is_anonymous(self):
+        return False
+
+    def is_authenticated(self):
+        return True
+
 
 class Geodata(db.Model):
     __tablename__ = 'geodata'

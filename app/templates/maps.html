@@ -424,7 +424,7 @@ display:none !important;
 					<li class="dropdown dropdown-user">
 						<a class="dropdown-toggle" data-toggle="dropdown">
 							<img src="assets/images/placeholder.jpg" alt="">
-							<span>Victoria</span>
+							<span>{{ current_user.nickname }}</span>
 							<i class="caret"></i>
 						</a>
 
@@ -434,7 +434,7 @@ display:none !important;
 							<li><a href="#"><span class="badge bg-blue pull-right">58</span> <i class="icon-comment-discussion"></i> Messages</a></li>
 							<li class="divider"></li>
 							<li><a href="#"><i class="icon-cog5"></i> Account settings</a></li>
-							<li><a href="#"><i class="icon-switch2"></i> Logout</a></li>
+							<li><a href="{{ url_for('logout') }}"><i class="icon-switch2"></i>Вийти</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -454,17 +454,6 @@ display:none !important;
 			<div class="sidebar sidebar-main">
 				<div class="sidebar-content">
 
-{#					<!-- User menu -->#}
-{#					<div class="sidebar-user">#}
-{##}
-{#                        00:00#}
-{##}
-{##}
-{#                        <div class="category-content">#}
-{##}
-{#						</div>#}
-{#					</div>#}
-{#					<!-- /user menu -->#}
 
 
 
@@ -510,7 +499,6 @@ display:none !important;
 	<!-- /page container -->
 
 
-  <!-- /page container -->
     <script>
       function initPano() {
         // Note: constructed panorama objects have visible: true

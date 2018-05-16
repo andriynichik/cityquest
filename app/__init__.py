@@ -9,10 +9,5 @@ from flask.ext.fixtures import FixturesMixin
 
 
 app = Flask(__name__, static_url_path = "/assets" , static_folder='assets')
-app.config.from_object(Config)
-db = SQLAlchemy(app)
-db.init_app(app)
-db.create_all()
-migrate = Migrate(app, db)
-migrate.add_command('db', MigrateCommand)
-FixturesMixin.init_app(app, db)
+
+

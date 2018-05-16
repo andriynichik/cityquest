@@ -31,6 +31,7 @@ class User(db.Model):
     social_id = db.Column(db.String(64), nullable=False, unique=True)
     nickname = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=True)
+    points = db.Column(db.Integer, default=0)
 
     def __init__(self,  nickname, email):
 

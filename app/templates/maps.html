@@ -52,6 +52,70 @@ display:none !important;
 	<script type="text/javascript" src="assets/js/charts/google/other/candlestick.js"></script>
 	<!-- /theme JS files -->
     <!-- Theme JS files -->
+
+    	<script type="text/javascript">
+	
+$(document).ready ( function () {
+    $(document).on ("click", "#send_answer", function () {
+    	                   $('#modal_form_vertical').on('hidden.bs.modal', function (e) {
+ 
+										});
+    	 val = $('.search_select2').val();
+       
+        $.ajax({
+                  type : 'POST',
+                  url : "/check_answer",
+                  data : {'city_id':val},
+                  success: function (result) {
+                      result = JSON.parse(result);
+
+                      if (result['status'] == true){
+                          swal({
+                            title: "Ура! Ви вірно вгадали населений пункт",
+                            text: "Вам нараховано +50 балів",
+                            confirmButtonColor: "#4cd964",
+                            type: "success"
+                          },
+                              function(){
+                                location.reload();
+
+                              }
+
+                          );
+
+                             
+
+
+                      }else{
+                      	
+                          swal({
+                            title: "Населений пункт обрано не вірно!",
+                            text: "За вгаданий регіон Вам нараховано +5 балів",
+                            confirmButtonColor: "#EF5350",
+                            type: "error"
+                          },
+                              function(){
+                                location.reload();
+
+                              }
+
+                          );
+
+
+                      }
+
+                }
+            });
+
+    });
+});
+
+    // $('#send_answer').on('click',function(){
+    //     console.log(1234);
+    // });
+
+
+</script>
 	<script type="text/javascript" src="assets/js/plugins/notifications/sweet_alert.min.js"></script>
 	<script type="text/javascript" src="assets/js/core/app.js"></script>
 	<script type="text/javascript" src="assets/js/pages/components_modals.js"></script>
@@ -65,6 +129,8 @@ display:none !important;
 
 
 	<!-- /theme JS files -->
+
+
 <script>
 
     function check_city_change(region_id) {
@@ -74,6 +140,7 @@ display:none !important;
                   data : {'region_id':region_id},
                   success: function (result) {
                       result = JSON.parse(result);
+   
                      $('#modal_form_vertical').on('shown.bs.modal', function() {
                         modal = $(this);
                         var html =  '';
@@ -126,7 +193,12 @@ display:none !important;
 
 
     }
+ 
+
+
+
 </script>
+
 </head>
 
 <body>
@@ -135,17 +207,17 @@ display:none !important;
 							<div class="modal-content">
 								<div class="modal-header">
 									<button type="button" class="close" data-dismiss="modal">×</button>
-									<h5 class="modal-title">Vertical form</h5>
+									<h5 class="modal-title">Вірно!</h5>
 								</div>
 
-								<form action="#">
+								<form id="check_city" action="#">
 									<div class="modal-body">
 
 
                                     <div class="content-group-lg">
-										<h6 class="text-semibold">Вірно! Оберіть населений пункт:</h6>
+										<h6 class="text-semibold">Оберіть населений пункт:</h6>
 
-										<select data-placeholder="Оберіть населений пункт" class="search_select2" tabindex="-1" aria-hidden="true">
+										<select name="city" data-placeholder="Оберіть населений пункт" class="search_select2" tabindex="-1" aria-hidden="true">
 
 										</select>
 									</div>
@@ -156,8 +228,8 @@ display:none !important;
 									</div>
 
 									<div class="modal-footer">
-
-										<button type="submit" class="btn btn-primary">Підтвердити</button>
+										<button type='button' class="btn btn-primary" id="send_answer">Підтвердити</button> 
+									
 									</div>
 								</form>
 							</div>
@@ -258,7 +330,7 @@ display:none !important;
 			</ul>
 
 			<p class="navbar-text">
-				<span class="label bg-success">Online</span>
+				<span class="label bg-success">{{ current_user.points }}</span>
 			</p>
 
 			<div class="navbar-right">

@@ -115,9 +115,6 @@ def oauth_callback(provider):
     login_user(user, True)
     return redirect(url_for('maps'))
 
-@app.route('/')
-def home():
-    return render_template('index.html')
 
 @app.route('/gen')
 def gen():
@@ -131,6 +128,26 @@ def create_location():
     created = GeoGen(lat = str(request.args.get('lat')),lng = str(request.args.get('lng')))
     rezult  = created.save_city()
     return json.dumps(rezult)
+
+
+@app.route('/check_answer', methods=['GET','POST'])
+def check_answer():
+    city_id = request.form["city_id"]
+    user = User.query.filter_by(id=current_user.id).first() 
+    if int(city_id) == int(session['city_id']):
+        result = True
+        # idnf = 
+        user.points += int(50)
+    else:
+        user.points += int(5)
+        session.pop('city_id', None)
+        result = False
+    
+    usr = User.query.filter_by(id=current_user.id).update(dict(points=user.points))
+    db.session.add(usr)
+    db.session.commit()
+    return json.dumps({'status':result})
+
 
 
 @app.route('/check_region', methods=['GET','POST'])

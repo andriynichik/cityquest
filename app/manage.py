@@ -61,6 +61,8 @@ def load_user(id):
 
 @app.route('/')
 def index():
+    if current_user is not None and current_user.is_authenticated:
+        return redirect(url_for('maps'))
     return render_template('index.html')
 
 
@@ -68,7 +70,6 @@ def index():
 @login_required
 def logout():
     logout_user()
-    session.clear()
     return redirect(url_for('index'))
 
 
@@ -138,6 +139,7 @@ def check_region():
     if int(region_id) == int(session['region_id']):
         result = True
     else:
+        session.pop('city_id', None)
         result = False
     return json.dumps({'status':result})
 

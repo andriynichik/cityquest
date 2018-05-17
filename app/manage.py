@@ -19,6 +19,7 @@ from generator import GeoGen
 app = Flask(__name__, static_url_path = "/assets" , static_folder='assets')
 app.config.from_object(Config)
 db = SQLAlchemy(app)
+db.init_app(app)
 migrate = Migrate(app, db)
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
@@ -133,20 +134,20 @@ def create_location():
 @app.route('/check_answer', methods=['GET','POST'])
 def check_answer():
     city_id = request.form["city_id"]
-    user = User.query.filter_by(id=current_user.id).first() 
+    user = User.query.filter_by(id=current_user.id).first()
+    print(current_user.id) 
     if int(city_id) == int(session['city_id']):
         result = True
         # idnf = 
         user.points += int(50)
     else:
         user.points += int(5)
-        session.pop('city_id', None)
+        # session.pop('city_id', None)
         result = False
     
     usr = User.query.filter_by(id=current_user.id).update(dict(points=user.points))
-    db.session.add(usr)
     db.session.commit()
-    return json.dumps({'status':result})
+    return json.dumps({'status':result, 'user':current_user.id})
 
 
 

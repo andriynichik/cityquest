@@ -108,12 +108,12 @@ def oauth_callback(provider):
 
         # We can do more work here to ensure a unique nickname, if you 
         # require that.
-        user=User(nickname=nickname, email=email)
+        user = User(nickname=nickname, email=email)
         db.session.add(user)
         db.session.commit()
     # Log in the user, by default remembering them for their next visit
     # unless they log out.
-    login_user(user, True)
+    login_user(user)
     return redirect(url_for('maps'))
 
 
@@ -132,22 +132,25 @@ def create_location():
 
 
 @app.route('/check_answer', methods=['GET','POST'])
+@login_required
 def check_answer():
     city_id = request.form["city_id"]
-    user = User.query.filter_by(id=current_user.id).first()
+    user = User.query.filter_by(email=current_user.email).first()
     print(current_user.id) 
     if int(city_id) == int(session['city_id']):
         result = True
-        # idnf = 
+     
         user.points += int(50)
     else:
         user.points += int(5)
-        # session.pop('city_id', None)
+        session.pop('city_id', None)
         result = False
-    
-    usr = User.query.filter_by(id=current_user.id).update(dict(points=user.points))
+
+    update = db.session.query(User).filter_by(email = current_user.email).update({
+             'points': user.points
+    })
     db.session.commit()
-    return json.dumps({'status':result, 'user':current_user.id})
+    return json.dumps({'status':result})
 
 
 
@@ -212,7 +215,7 @@ def maps():
         session['lng'] = locate.longitude
 
         data = {"lat": locate.latitude,"lng": locate.longitude}
-    return render_template('maps.html',  data=data, regions=regions)
+    return render_template('maps.html', user=current_user.points, data=data, regions=regions)
 
 if __name__ == '__main__':
     app.run(debug=True,  host='0.0.0.0')

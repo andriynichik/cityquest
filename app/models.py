@@ -33,9 +33,8 @@ class User(db.Model):
     email = db.Column(db.String(64), nullable=True)
     points = db.Column(db.Integer, default=0)
 
-    def __init__(self,  nickname, email):
+    def __init__(self, nickname, email):
 
-       
         self.nickname =nickname
         self.email = email
       
@@ -49,8 +48,11 @@ class User(db.Model):
         return False
 
     def is_authenticated(self):
+        
         return True
-
+    def __repr__(self):
+        return "<User('%d', '%s', '%s')>" \
+                % (self.id, self.username, self.email)
 
 class Geodata(db.Model):
     __tablename__ = 'geodata'

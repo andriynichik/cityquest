@@ -45,10 +45,24 @@
 
 		<div class="navbar-collapse collapse" id="navbar-mobile">
 			<ul class="nav navbar-nav navbar-right">
-			
+				<li>
+					<a href="#">
+						<i class="icon-display4"></i> <span class="visible-xs-inline-block position-right"> Go to website</span>
+					</a>
+				</li>
 
-		
+				<li>
+					<a href="#">
+						<i class="icon-user-tie"></i> <span class="visible-xs-inline-block position-right"> Contact admin</span>
+					</a>
+				</li>
 
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown">
+						<i class="icon-cog3"></i>
+						<span class="visible-xs-inline-block position-right"> Options</span>
+					</a>
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -71,56 +85,37 @@
 					<form action="index.html">
 						<div class="login-form">
 							<div class="text-center">
-								<div class="icon-object border-warning-400 text-warning-400"><i class="icon-people"></i></div>
-							    <h5 class="content-group-lg">Увійдіть або зареєструйтеся <small class="display-block">для початку гри</small></h5>
+					
+							    <h5 class="content-group-lg">Додати паро локацію</h5>
                             </div>
 
 							<div class="form-group has-feedback has-feedback-left">
-								<input type="text" class="form-control input-lg" placeholder="Username">
-								<div class="form-control-feedback">
-									<i class="icon-user text-muted"></i>
-								</div>
+								<input type="text" class="form-control input-lg" placeholder="Широта">
+								
 							</div>
+
+						
 
 							<div class="form-group has-feedback has-feedback-left">
-								<input type="text" class="form-control input-lg" placeholder="Password">
-								<div class="form-control-feedback">
-									<i class="icon-lock2 text-muted"></i>
-								</div>
+								<input type="text" class="form-control input-lg" placeholder="Довгота">
+							
 							</div>
+							<div class="form-group has-feedback has-feedback-left">
+								<select class="form-control input-lg">
+									<option>Звичайний режим</option>
+									<option>Спортивні арени</option>
+									<option>Замки</option>
 
-							<div class="form-group login-options">
-								<div class="row">
-									<div class="col-sm-6">
-										<label class="checkbox-inline">
-											<input type="checkbox" class="styled" checked="checked">
-											Remember               
-         
-        
-       
-										</label>
-									</div>
-
-									<div class="col-sm-6 text-right">
-										<a href="login_password_recover.html">Forgot password?</a>
-									</div>
-								</div>
+								</select>
+								
+								
 							</div>
 
 							<div class="form-group">
-								<button type="submit" class="btn bg-blue btn-block btn-lg">Login <i class="icon-arrow-right14 position-right"></i></button>
+								<button type="submit" class="btn bg-blue btn-block btn-lg">Створити <i class="icon-arrow-right14 position-right"></i></button>
 							</div>
 
-							<div class="content-divider text-muted form-group"><span>або авторизуйся через:</span></div>
-							<ul class="list-inline form-group list-inline-condensed text-center">
-								<li><a href="{{ url_for('oauth_authorize', provider='facebook') }}" class="btn border-indigo text-indigo btn-flat btn-icon btn-rounded"><i class="icon-facebook"></i></a></li>
-								<li><a href="{{ url_for('oauth_authorize', provider='twitter') }}" class="btn border-info text-info btn-flat btn-icon btn-rounded"><i class="icon-twitter"></i></a></li>
-                                <li><a href="{{ url_for('oauth_authorize', provider='google') }}" class="btn border-info text-info btn-flat btn-icon btn-rounded"><i class="icon-google"></i></a></li>
-
-                            </ul>
-
-							<div class="content-divider text-muted form-group"><span>Ще немає акаунту?</span></div>
-							<a href="login_registration.html" class="btn bg-slate btn-block btn-lg content-group">Реєстрація</a>
+						
                         </div>
 					</form>
 					<!-- /advanced login -->

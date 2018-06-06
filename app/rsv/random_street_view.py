@@ -131,7 +131,7 @@ try:
                     # print "    ========== Got one! =========="
                     print '[{"lat":"'+str(rand_lat)+'","lng":"'+str(rand_lon)+'"}],'
                     # http://0.0.0.0:5000/api/create_location?lat=48.5206048429&lng=32.2237075854
-                    response = requests.get('http://0.0.0.0:5000/api/create_location?lat='+str(rand_lat)+'&lng='+str(rand_lon)+'')
+                    response = requests.get('http://0.0.0.0:5000/api/create_location?lat='+str(rand_lat)+'&lng='+str(rand_lon)+'&type=0')
                     data = response.content
                     print(data)
                     # req = urllib.request.Request('http://0.0.0.0:5000/api/create_location?lat='+str(rand_lat)+'&lng='+str(rand_lon)+'')

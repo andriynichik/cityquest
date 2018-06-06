@@ -9,10 +9,12 @@ class GeoGen():
 
 	lat = None
 	lng = None
-
-	def __init__(self, lat,lng):
+	type_loc = 0
+ 
+	def __init__(self, lat,lng,type_loc):
 		self.lat = lat
 		self.lng = lng
+		self.type_loc = type_loc
 		self.db = db = SQLAlchemy()
 
 	def geocode(self):
@@ -73,6 +75,7 @@ class GeoGen():
 					city_id = int(city.id),
 					latitude = self.lat,
 					longitude = self.lng,
+					type = self.type_loc,
 				)
 			self.db.session.add(new)
 			self.db.session.commit()

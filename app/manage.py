@@ -6,7 +6,6 @@ import sys
 from oauth import OAuthSignIn
 import json
 from flask_sqlalchemy import SQLAlchemy
-# from flask.ext.session import Session
 from sqlalchemy.sql import func
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from models import Locations, Geodata, User
@@ -14,7 +13,7 @@ from config import Config
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 from generator import GeoGen
-
+import datetime
 
 app = Flask(__name__, static_url_path = "/assets" , static_folder='assets')
 app.config.from_object(Config)
@@ -29,10 +28,11 @@ app.config['OAUTH_CREDENTIALS'] = {
         'id': '156164541888335',
         'secret': 'cc23f5004b2e5536218a3206635b75bc'
     },
+    'google': {
+            'id': '953536087639-c13jglsqemu2hf4ansq64a9rnmi9jofh.apps.googleusercontent.com',
+            'secret': '-mgTCV7H5vtRk8UoWXp8qVZY'
+        },
     'twitter': {
-        'id': '3RzWQclolxWZIMq5LJqzRZPTl',
-        'secret': 'm9TEd58DSEtRrZHpz2EjrV9AhsBRxKMo8m3kuIZj3zLwzwIimt'
-    }, 'google': {
             'id': '953536087639-c13jglsqemu2hf4ansq64a9rnmi9jofh.apps.googleusercontent.com',
             'secret': '-mgTCV7H5vtRk8UoWXp8qVZY'
         }
@@ -74,13 +74,9 @@ def logout():
     return redirect(url_for('index'))
 
 
-# @lm.user_loader
-# def load_user(id):
-#     return User.query.get(int(id))
 
 @app.route('/authorize/<provider>')
 def oauth_authorize(provider):
-    # Flask-Login function
     if not current_user.is_anonymous:
         return redirect(url_for('index'))
     oauth = OAuthSignIn.get_provider(provider)
@@ -94,25 +90,17 @@ def oauth_callback(provider):
     oauth = OAuthSignIn.get_provider(provider)
     username, email = oauth.callback()
     if email is None:
-        # I need a valid email address for my user identification
+
         flash('Authentication failed.')
         return redirect(url_for('index'))
-    # Look if the user already exists
     user=User.query.filter_by(email=email).first()
     if not user:
-        # Create the user. Try and use their name returned by Google,
-        # but if it is not set, split the email address at the @.
         nickname = username
         if nickname is None or nickname == "":
             nickname = email.split('@')[0]
-
-        # We can do more work here to ensure a unique nickname, if you 
-        # require that.
         user = User(nickname=nickname, email=email)
         db.session.add(user)
         db.session.commit()
-    # Log in the user, by default remembering them for their next visit
-    # unless they log out.
     login_user(user)
     return redirect(url_for('maps'))
 
@@ -123,10 +111,10 @@ def gen():
     rezult  = created.save_city()
     return json.dumps(rezult) 
 
-# localhost:5000/api/create_location?lat=48.5206048429&lng=32.2237075854
+# localhost:5000/api/create_location?lat=48.5206048429&lng=32.2237075854&type=0
 @app.route('/api/create_location')
 def create_location():
-    created = GeoGen(lat = str(request.args.get('lat')),lng = str(request.args.get('lng')))
+    created = GeoGen(lat = str(request.args.get('lat')),lng = str(request.args.get('lng')), type_loc = str(request.args.get('type')))
     rezult  = created.save_city()
     return json.dumps(rezult)
 
@@ -141,13 +129,15 @@ def check_answer():
         result = True
      
         user.points += int(50)
+        session.pop('city_id', None)
     else:
         user.points += int(5)
         session.pop('city_id', None)
         result = False
 
     update = db.session.query(User).filter_by(email = current_user.email).update({
-             'points': user.points
+             'points': user.points,
+             'last_use':datetime.datetime.now()
     })
     db.session.commit()
     return json.dumps({'status':result})
@@ -155,12 +145,20 @@ def check_answer():
 
 
 @app.route('/check_region', methods=['GET','POST'])
+@login_required
 def check_region():
     region_id = request.form["region_id"]
     if int(region_id) == int(session['region_id']):
         result = True
     else:
+        user = User.query.filter_by(email=current_user.email).first()
+        user.points -= int(5)
         session.pop('city_id', None)
+        update = db.session.query(User).filter_by(email = current_user.email).update({
+             'points': user.points,
+             'last_use':datetime.datetime.now()
+        })
+        db.session.commit()
         result = False
     return json.dumps({'status':result})
 
@@ -175,7 +173,23 @@ def get_sity_by_region():
     return json.dumps(data)
 
 
-@app.route('/maps')
+
+@app.route('/change_mod/<int:type_mod>')
+@login_required
+def change_mod(type_mod):
+    session['type_mod'] = int(type_mod)
+    session.pop('city_id', None)
+    
+    return redirect(url_for('maps'))
+
+
+@app.route('/admin', strict_slashes=False)
+@login_required
+def admin():
+
+    return render_template('admin.html')
+
+@app.route('/maps', strict_slashes=False)
 @login_required
 def maps():
     regions = {
@@ -208,12 +222,17 @@ def maps():
     if 'city_id' in session and 'lat' in session:
         data = {"lat": session['lat'], "lng": session['lng']}
     else:
-        locate =  Locations.query.order_by(func.random()).first()
+        if 'type_mod' in session:
+            type_mod = session['type_mod']
+        else:
+            type_mod = 0
+
+        locate =  Locations.query.filter_by(type=type_mod).order_by(func.random() ).first()
         session['region_id'] = locate.region_id
         session['city_id'] = locate.city_id
         session['lat'] = locate.latitude
         session['lng'] = locate.longitude
-
+        rating_list = User.query.order_by(User.points).limit(5)
         data = {"lat": locate.latitude,"lng": locate.longitude}
     return render_template('maps.html', user=current_user.points, data=data, regions=regions)
 

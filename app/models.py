@@ -13,13 +13,15 @@ class Locations(db.Model):
     latitude = db.Column(db.String(64), nullable=True)
     longitude = db.Column(db.String(64), nullable=True)
     created = db.Column(db.DateTime, default=datetime.datetime.now())
+    type =  db.Column(db.Integer, default=0)
 
-    def __init__(self,  region_id, city_id, latitude, longitude):
+    def __init__(self,  region_id, city_id, latitude, longitude, type):
 
         self.region_id = region_id
         self.city_id =city_id
         self.latitude = latitude
         self.longitude = longitude
+        self.type = type
 
 
 
@@ -32,6 +34,8 @@ class User(db.Model):
     nickname = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=True)
     points = db.Column(db.Integer, default=0)
+    role =  db.Column(db.Integer, default=0)
+    last_use =  db.Column(db.String(64), default=datetime.datetime.now())
 
     def __init__(self, nickname, email):
 
@@ -57,7 +61,7 @@ class User(db.Model):
 class Geodata(db.Model):
     __tablename__ = 'geodata'
     id = db.Column(db.Integer, primary_key=True)
-    region_id = db.Column(db.Integer, nullable=False, unique=True)
+    region_id = db.Column(db.Integer, nullable=False)
     lat = db.Column(db.String(64), nullable=True)
     lng = db.Column(db.String(64), nullable=True)
     title = db.Column(db.String(64), nullable=True)

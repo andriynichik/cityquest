@@ -2,7 +2,7 @@
     build: .
     command: python app/manage.py
     ports:
-     - "5000:5000"
+     - "80:80"
     volumes:
      - .:/app
     links:

@@ -189,8 +189,7 @@ def admin():
 
     return render_template('admin.html')
 
-@app.route('/google7a33b4be2655b9ca.html', strict_slashes=False)
-@login_required
+@app.route('/google7a33b4be2655b9ca.html')
 def google_domain():
 
     return render_template('google7a33b4be2655b9ca.html')

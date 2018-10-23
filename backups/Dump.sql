@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `geodata` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `geodata`;
 -- MySQL dump 10.13  Distrib 5.7.19, for Linux (x86_64)
 --
 -- Host: 0.0.0.0    Database: geodata
@@ -60,7 +62,7 @@ CREATE TABLE `locations` (
   `created` varchar(45) DEFAULT NULL,
   `type` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -84,7 +86,7 @@ CREATE TABLE `office` (
   `flight__id` int(11) NOT NULL AUTO_INCREMENT,
   `airline` varchar(128) NOT NULL,
   PRIMARY KEY (`flight__id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -108,7 +110,7 @@ CREATE TABLE `support` (
   `user_id` int(11) DEFAULT NULL,
   `message` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,7 +139,7 @@ CREATE TABLE `users` (
   `last_use` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `social_id_UNIQUE` (`social_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,4 +160,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-23 12:58:33
+-- Dump completed on 2018-10-23 13:02:23

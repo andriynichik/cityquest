@@ -9,7 +9,7 @@
      - mysql
     hostname: myappserver
   mysql:
-    image: mysql:latest
+    image: mysql:5.7
     volumes:
      - /var/lib/mysql
     environment:

@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.7.17, for macos10.12 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.19, for Linux (x86_64)
 --
 -- Host: 0.0.0.0    Database: geodata
 -- ------------------------------------------------------
@@ -18,7 +18,6 @@
 --
 -- Table structure for table `geodata`
 --
-USE `geodata`;
 
 DROP TABLE IF EXISTS `geodata`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -57,8 +56,11 @@ CREATE TABLE `locations` (
   `city_id` int(11) DEFAULT NULL,
   `latitude` varchar(45) DEFAULT NULL,
   `longitude` varchar(45) DEFAULT NULL,
+  `img` varchar(45) DEFAULT NULL,
+  `created` varchar(45) DEFAULT NULL,
+  `type` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +69,84 @@ CREATE TABLE `locations` (
 
 LOCK TABLES `locations` WRITE;
 /*!40000 ALTER TABLE `locations` DISABLE KEYS */;
+INSERT INTO `locations` VALUES (1,4,303008033,'49.0585876604','28.1177892359',NULL,'2018-04-27 15:43:31.164077','0'),(2,12,303012647,'47.9712389135','33.4251139942',NULL,'2018-04-27 15:43:31.164077','0'),(3,1,303027839,'49.953547147','36.335269517',NULL,'2018-04-27 15:43:31.164077','0'),(4,12,303018099,'48.6492936356','35.2485826136',NULL,'2018-04-27 15:43:31.164077','0'),(5,18,303019067,'48.6962023543','30.5442421426',NULL,'2018-04-27 15:43:31.164077','0'),(6,16,303005418,'51.6804128229','33.920553418',NULL,'2018-04-27 15:43:31.164077','0'),(7,7,303010242,'48.6490736371','26.6119687731',NULL,'2018-04-27 15:43:31.164077','0'),(8,21,303014487,'49.846188287','23.9712863916',NULL,'2018-04-27 15:43:31.164077','0'),(9,21,303014487,'49.7742763','24.028389',NULL,'2018-06-06 13:19:09.906431','1'),(10,11,303018950,'46.4805563','30.7553736',NULL,'2018-06-06 13:22:37.888313','1'),(11,15,303007405,'48.0209885','37.8099365',NULL,'2018-06-06 13:22:37.888313','1'),(12,3,303010783,'50.4332817','30.5219178',NULL,'2018-06-06 13:22:37.888313','1'),(13,21,303019140,'49.9685045','24.9005617',NULL,'2018-06-06 13:22:37.888313','2'),(14,6,303027343,'48.6212616','22.3072281',NULL,'2018-06-21 16:41:46.396103','2'),(15,21,303014487,'49.8346961','24.0145558',NULL,'2018-06-21 16:41:46.396103','0'),(16,22,303014409,'50.7385978','25.323155',NULL,'2018-06-21 16:41:46.396103','2');
 /*!40000 ALTER TABLE `locations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `office`
+--
+
+DROP TABLE IF EXISTS `office`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `office` (
+  `flight__id` int(11) NOT NULL AUTO_INCREMENT,
+  `airline` varchar(128) NOT NULL,
+  PRIMARY KEY (`flight__id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `office`
+--
+
+LOCK TABLES `office` WRITE;
+/*!40000 ALTER TABLE `office` DISABLE KEYS */;
+/*!40000 ALTER TABLE `office` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `support`
+--
+
+DROP TABLE IF EXISTS `support`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `support` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `message` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `support`
+--
+
+LOCK TABLES `support` WRITE;
+/*!40000 ALTER TABLE `support` DISABLE KEYS */;
+/*!40000 ALTER TABLE `support` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `social_id` varchar(64) DEFAULT NULL,
+  `nickname` varchar(64) DEFAULT NULL,
+  `email` varchar(64) DEFAULT NULL,
+  `points` int(11) DEFAULT NULL,
+  `role` tinyint(2) DEFAULT NULL,
+  `last_use` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `social_id_UNIQUE` (`social_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -79,4 +158,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-17 23:37:19
+-- Dump completed on 2018-10-23 12:58:33

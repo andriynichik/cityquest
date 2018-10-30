@@ -75,7 +75,7 @@ class FacebookSignIn(OAuthSignIn):
             name='facebook',
             client_id=self.consumer_id,
             client_secret=self.consumer_secret,
-            authorize_url='https://graph.facebook.com/oauth/authorize',
+            authorize_url='https://graph.facebook.com/v3.0/oauth/authorize',
             access_token_url='https://graph.facebook.com/oauth/access_token',
             base_url='https://graph.facebook.com/'
         )

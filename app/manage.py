@@ -25,8 +25,8 @@ manager.add_command('db', MigrateCommand)
 
 app.config['OAUTH_CREDENTIALS'] = {
     'facebook': {
-        'id': '156164541888335',
-        'secret': 'cc23f5004b2e5536218a3206635b75bc'
+        'id': '1242173119158848',
+        'secret': 'c6a25c7a8a47ba44fae91234c5e43e0b'
     },
     'google': {
             'id': '953536087639-c13jglsqemu2hf4ansq64a9rnmi9jofh.apps.googleusercontent.com',
